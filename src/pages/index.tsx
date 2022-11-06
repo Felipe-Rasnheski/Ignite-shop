@@ -33,7 +33,7 @@ export default function Home({ products }: HomeProps) {
   const cart = useShoppingCart()
   const { addItem } = cart
 
-  function ProductList(product: IProduct, addItem:CartActions["addItem"]) {
+  function ProductList(product: IProduct, addItem: CartActions["addItem"]) {
     addItem(product)
   }
 

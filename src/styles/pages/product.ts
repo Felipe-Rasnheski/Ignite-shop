@@ -51,24 +51,30 @@ export const ProductDetails = styled('div', {
     color: "$gray300",
   },
 
-  button: {
-    marginTop: "auto",
-    background: "$green500",
-    border: 0,
-    color: "$white",
-    borderRadius: 8,
-    padding: "1.25rem",
-    cursor: "pointer",
-    fontWeight: "bold",
-    fontSize: "$md",
+  div: {
+    display: "flex",
+    gap: "2rem",
+    flex: 1,
 
-    "&:disabled": {
-      opacity: 0.6,
-      cursor: "not-allowed",
-    },
-
-    "&:not(disabled):hover": {
-      background: "$green300", 
+    "button": {
+      marginTop: "auto",
+      background: "$green500",
+      border: 0,
+      color: "$white",
+      borderRadius: 8,
+      padding: "1.25rem",
+      cursor: "pointer",
+      fontWeight: "bold",
+      fontSize: "$md",
+  
+      "&:disabled": {
+        opacity: 0.6,
+        cursor: "not-allowed",
+      },
+  
+      "&:not(disabled):hover": {
+        background: "$green300", 
+      },
     },
   },
 })

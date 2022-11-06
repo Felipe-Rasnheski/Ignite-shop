@@ -1,6 +1,8 @@
 import axios from "axios";
 import Image from "next/image";
-import { Handbag, Minus, Plus, X } from "phosphor-react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Handbag, House, Minus, Plus, X } from "phosphor-react";
 import { useState } from "react";
 import { CartActions, useShoppingCart } from "use-shopping-cart";
 import { CartEntry as ICartEntry, formatCurrencyString } from "use-shopping-cart/core";
@@ -17,13 +19,12 @@ function CartEntry({ entry, removeItem, incrementItem, decrementItem}: CartyEntr
   return (
     <EntryContainer>
       <div className="imgContainer">
-        <Image src={entry.image} width={94} height={94} alt="" />
+        <Image priority src={entry.image} width={94} height={94} alt="" />
       </div>
       <div className="entryInfos">
         <span>{entry.name}</span>
         <strong>
           {formatCurrencyString({value: entry.price, currency: "BRL", language: "PT"})}
-          
         </strong>
         <button onClick={() => removeItem(entry.id)}>Remover</button>
       </div>
@@ -38,6 +39,8 @@ function CartEntry({ entry, removeItem, incrementItem, decrementItem}: CartyEntr
 
 export function Cart() {
   const [cartShowing, setCartShowing] = useState(false)
+
+  const { route } = useRouter()
 
   const cart = useShoppingCart()
   const { 
@@ -113,20 +116,44 @@ export function Cart() {
   }
 
   const cartNumberItems = cartEntries.length
-  
-  return (
+   
+  return  route !== "/success" ? (
     <div>
       <div className="inconContainer">
-        <button className="inconBag" onClick={() => setCartShowing(true)} disabled={cartShowing}>
+        {route === "/product/[id]" && (
+            <Link href="/" title="Home">
+              <button className="inconHome" >
+                <House size={24} />
+              </button>
+            </Link>
+          )
+        }
+        <button 
+          className="inconBag" 
+          onClick={() => setCartShowing(true)} 
+          disabled={cartShowing}
+        >
           <Handbag size={24}  />
         </button>
-        {cartShowing && <CartProducts />}
       </div>
-      {!cartIsEmpty && (
-        <span className="numberItems">{cartNumberItems}</span>
-      )}
+      {cartShowing && <CartProducts />}
+      {!cartIsEmpty ? (
+        <span 
+          className={route === "/" ? "numberItems numberItemsHome" : "numberItems"}
+        >
+          {cartNumberItems}
+        </span>
+      ) : <span className="numberItems numberItemsIsEmpty">{cartNumberItems}</span>}
     </div>
-    
+
+  ) : (
+    <div className="inconContainer">
+      <Link href="/">
+        <button className="inconBag">
+          <House size={24}  />
+        </button>
+      </Link>
+    </div>
   )
 }
 

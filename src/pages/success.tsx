@@ -41,7 +41,7 @@ export default function Success({ customerName, products }: SuccessProps) {
           
         {products.length === 1 ? (
             <p>
-              Uhuul <strong>{customerName}</strong>, sua Camiseta 
+              Uhuul <strong>{customerName}</strong>, sua Camiseta{" "}
               <strong>{products[0].name}</strong> já está a caminho da sua casa.
             </p>
           )
