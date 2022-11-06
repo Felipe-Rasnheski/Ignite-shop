@@ -4,8 +4,10 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import { CaretLeft, CaretRight } from "phosphor-react";
+import { CaretLeft, CaretRight, Handbag } from "phosphor-react";
 import Stripe from "stripe";
+import { useShoppingCart } from "use-shopping-cart";
+import { CartActions, Product as IProduct } from "use-shopping-cart/core";
 import { stripe } from "../lib/stripe";
 import { HomeContainer, Product } from "../styles/pages/home";
 
@@ -13,18 +15,27 @@ interface HomeProps {
   products: {
     id: string;
     name: string;
-    imageUrl: string;
-    price: string;
+    image: string;
+    price: number;
+    description: string;
+    price_id: string;
   }[]
 }
 
 export default function Home({ products }: HomeProps) {
   const [sliderRef ,instanceRef] = useKeenSlider({
     slides: {
-      perView: 3,
+      perView: 2.7,
       spacing: 42,
     }
   })
+
+  const cart = useShoppingCart()
+  const { addItem } = cart
+
+  function ProductList(product: IProduct, addItem:CartActions["addItem"]) {
+    addItem(product)
+  }
 
   return (
     <>
@@ -35,7 +46,7 @@ export default function Home({ products }: HomeProps) {
       <HomeContainer ref={sliderRef} className="keen-slider" >
         <div className="buttonsCarosel">
           <button onClick={() => {
-            instanceRef.current.prev()
+              instanceRef.current.prev()
             }}>
             <CaretLeft />
           </button>
@@ -51,18 +62,28 @@ export default function Home({ products }: HomeProps) {
 
         {products.map((product) => {
           return (
-            <Link href={`/product/${product.id}`} key={product.id} prefetch={false}>
-              <Product  className="keen-slider__slide" >
-                <Image src={product.imageUrl} width={520} height={480} alt="" />
-                <footer>
+            <Product key={product.id}  className="keen-slider__slide" >
+              <Link href={`/product/${product.id}`}  prefetch={false}>
+                <Image priority src={product.image} width={520} height={480} alt="" />
+              </Link>
+              <footer>
+                <div className="infoProduct">
                   <strong>{product.name}</strong>
-                  <span>{product.price}</span>
-                </footer>
-              </Product>
-            </Link>
+                  <span>
+                    {new Intl.NumberFormat("pt-Br", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(product.price / 100)}
+                  </span>
+                </div>
+                
+                <button onClick={() => ProductList({...product, currency:"BRL"}, addItem)}>
+                  <Handbag size={32} />
+                </button>
+              </footer>
+            </Product>
           )
         })}
-      
       </HomeContainer>
     </>
   )
@@ -80,11 +101,10 @@ export const getStaticProps: GetStaticProps = async () => {
     return {
       id: product.id,
       name: product.name,
-      imageUrl: product.images[0],
-      price: new Intl.NumberFormat("pt-Br", {
-        style: "currency",
-        currency: "BRL",
-      }).format(price.unit_amount / 100), 
+      image: product.images[0],
+      price: price.unit_amount,
+      description: product.description,
+      price_id: price.id,
     }
   }) 
 

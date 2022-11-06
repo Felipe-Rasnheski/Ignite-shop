@@ -5,7 +5,6 @@ export const HomeContainer = styled("main", {
   width: "100%",
   maxWidth: "calc(100vw - ((100vw - 1180px) / 2))",
   marginLeft: "auto",
-  // minHeight: 656,
 
   '.buttonsCarosel': {
     position: "absolute",
@@ -39,7 +38,6 @@ export const HomeContainer = styled("main", {
       padding: "0 1rem 0 4rem ",
 
       "&:hover": {
-
         cursor: "pointer",
         background: "linear-gradient(90deg, rgba(0, 0, 0, 0) 0%,  rgba(0, 0, 0, 0.9)100%)"
       }, 
@@ -68,7 +66,7 @@ export const Product = styled("div", {
     bottom: "0.25rem",
     left: "0.25rem",
     right: "0.25rem",
-    padding: "2rem",
+    padding: "1.25rem",
 
     borderRadius: 6,
     
@@ -82,15 +80,39 @@ export const Product = styled("div", {
     opacity: 0,
     transition: "all 0.2s ease-in-out",
 
-    strong: {
-      fontSize: "$lg",
-      color: "$gray100"
+    ".infoProduct": {
+      display: "flex",
+      flexDirection: "column",
+      gap: "0.25rem",
+
+      strong: {
+        fontSize: "$lg",
+        color: "$gray100"
+      },
+
+      span: {
+        fontSize: "$xl",
+        fontWeight: "bold",
+        color: "$green300",
+      },
     },
 
-    span: {
-      fontSize: "$xl",
-      fontWeight: "bold",
-      color: "$green300",
+    button: {
+      width: "3.5rem",
+      height: "3.5rem",
+      background: "$green500",
+      color: "$gray100",
+      border: "none",
+      borderRadius: 8,
+
+      "&:hover": {
+        background: "$green300",
+        cursor: "pointer",
+      }
+    },
+
+    "&:hover": {
+      cursor: "default",
     }
   },
 
